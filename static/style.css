@@ -1,0 +1,433 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    color: #e7ebeb;
+    background: linear-gradient(180deg, #0a1516 0%, #060c0d 100%);
+    background-attachment: fixed;
+}
+
+/* -------------------------
+   Top Header Bar
+------------------------- */
+
+.topbar {
+    height: 54px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    background: rgba(8, 17, 18, 0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(91, 132, 133, 0.16);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-icon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #23858a;
+    color: #f2f7f7;
+    font-size: 14px;
+    box-shadow: 0 0 14px rgba(35, 133, 138, 0.18);
+}
+
+.brand-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: #f2f5f5;
+    line-height: 1;
+}
+
+.brand-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #8fa5a5;
+    font-size: 12px;
+    line-height: 1;
+}
+
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #4aa4a5;
+    box-shadow: 0 0 7px rgba(74, 164, 165, 0.35);
+}
+
+/* -------------------------
+   Main Layout Canvas
+------------------------- */
+
+.chat {
+    width: min(760px, calc(100% - 32px));
+    margin: 0 auto;
+    padding-top: 32px;
+    padding-bottom: 160px;
+}
+
+.message {
+    display: flex;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+/* -------------------------
+   User Message
+------------------------- */
+
+.user-message {
+    justify-content: flex-end;
+}
+
+.user-bubble {
+    max-width: min(580px, 82%);
+    padding: 12px 18px;
+    border-radius: 14px;
+    background: #174f55;
+    color: #edf3f3;
+    font-size: 15px;
+    line-height: 1.55;
+    white-space: pre-wrap;
+    border: 1px solid rgba(74, 164, 165, 0.28);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+/* -------------------------
+   Assistant Message
+------------------------- */
+
+.assistant-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.assistant-avatar {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    background: #23858a;
+    color: #f2f7f7;
+    font-size: 13px;
+    margin-top: 2px;
+    border: 1px solid rgba(91, 180, 181, 0.24);
+    box-shadow: 0 0 12px rgba(35, 133, 138, 0.14);
+}
+
+.assistant-body {
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.assistant-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 28px;
+    margin-bottom: 4px;
+}
+
+.assistant-name {
+    color: #f2f5f5;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.assistant-content {
+    color: #e2e8e8;
+    font-size: 15px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+/* -------------------------
+   Thinking Indicator
+------------------------- */
+
+.thinking {
+    color: #7fa7a8;
+    font-size: 13px;
+    animation: thinkingPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes thinkingPulse {
+    0%, 100% {
+        opacity: 0.4;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* -------------------------
+   Process Accordion
+------------------------- */
+
+.process-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 10px;
+    border: 1px solid rgba(74, 164, 165, 0.22);
+    background: rgba(20, 55, 57, 0.42);
+    color: #8faeae;
+    font-family: inherit;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.process-button:hover {
+    color: #dceaea;
+    background: rgba(35, 133, 138, 0.18);
+    border-color: rgba(74, 164, 165, 0.42);
+}
+
+.process-chevron {
+    display: inline-block;
+    font-size: 13px;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+.assistant-body.process-open .process-chevron {
+    transform: rotate(90deg);
+}
+
+.process-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+        grid-template-rows 0.2s ease,
+        opacity 0.2s ease;
+}
+
+.assistant-body.process-open .process-panel {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+.process-inner {
+    overflow: hidden;
+    min-height: 0;
+    padding: 12px 16px;
+    border-radius: 10px;
+    background: #0d1819;
+    border: 1px solid rgba(74, 164, 165, 0.18);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.025);
+}
+
+.process-step {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(74, 164, 165, 0.12);
+}
+
+.process-step:last-of-type {
+    border-bottom: none;
+}
+
+.process-label {
+    margin-bottom: 2px;
+    color: #6fa0a1;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+
+.process-tool-name {
+    margin-bottom: 4px;
+    color: #dce7e7;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 12px;
+}
+
+.process-step pre {
+    margin: 0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    background: #081112;
+    color: #8eaaaa;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    overflow-x: auto;
+    border: 1px solid rgba(74, 164, 165, 0.1);
+}
+
+.process-empty {
+    padding: 4px 0;
+    color: #7f9999;
+    font-size: 12px;
+}
+
+.process-footer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-top: 8px;
+    margin-top: 4px;
+    border-top: 1px solid rgba(74, 164, 165, 0.12);
+    color: #718b8b;
+    font-size: 11px;
+}
+
+.process-completed {
+    color: #91b8b8;
+}
+
+/* -------------------------
+   Composer
+------------------------- */
+
+.composer-area {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    padding: 16px 16px 24px;
+    background: linear-gradient(
+        180deg,
+        rgba(6, 12, 13, 0) 0%,
+        rgba(6, 12, 13, 0.82) 40%,
+        #060c0d 100%
+    );
+    pointer-events: none;
+}
+
+.composer {
+    pointer-events: auto;
+    width: min(720px, 100%);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px 10px 16px;
+    border-radius: 14px;
+    background: #111c1d;
+    border: 1px solid rgba(91, 132, 133, 0.28);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
+}
+
+#messageInput {
+    flex: 1;
+    min-width: 0;
+    height: 24px;
+    max-height: 160px;
+    padding: 0;
+    margin: 0;
+    resize: none;
+    overflow-y: auto;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #f1f5f5;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 24px;
+    display: block;
+}
+
+#messageInput::placeholder {
+    color: #6f8585;
+}
+
+.send-button {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 8px;
+    background: #23858a;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition:
+        background 0.15s ease,
+        box-shadow 0.15s ease;
+    padding: 0;
+    border: 1px solid rgba(91, 180, 181, 0.24);
+    box-shadow: 0 0 10px rgba(35, 133, 138, 0.12);
+}
+
+.send-button svg {
+    display: block;
+    width: 15px;
+    height: 15px;
+}
+
+.send-button:hover {
+    background: #2b969a;
+    box-shadow: 0 0 14px rgba(35, 133, 138, 0.2);
+}
+
+.send-button:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+}
+
+/* -------------------------
+   Mobile Responsiveness
+------------------------- */
+
+@media (max-width: 600px) {
+    .topbar {
+        padding: 0 16px;
+    }
+
+    .chat {
+        width: calc(100% - 24px);
+        padding-top: 20px;
+    }
+
+    .user-bubble {
+        max-width: 88%;
+    }
+
+    .composer-area {
+        padding: 12px 12px 18px;
+    }
+}

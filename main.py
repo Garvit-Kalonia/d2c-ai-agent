@@ -311,6 +311,7 @@ def run_agent_turn(messages, user_input):
     })
 
     tool_calls = []
+    agent_steps = []
     iterations = 0
     completed = False
     final_response = ""
@@ -333,12 +334,40 @@ def run_agent_turn(messages, user_input):
             break
 
         for call in assistant_msg.tool_calls:
+            tool_name = call.function.name
+            tool_args = call.function.arguments
+
+            # Normalize the arguments so the UI gets a consistent object.
+            if isinstance(tool_args, str):
+                try:
+                    display_args = json.loads(tool_args)
+                except json.JSONDecodeError:
+                    display_args = tool_args
+            else:
+                display_args = tool_args
+
             tool_calls.append({
-                "name": call.function.name,
-                "arguments": call.function.arguments
+                "name": tool_name,
+                "arguments": display_args
+            })
+
+            # Record the tool call before executing it. This gives the UI
+            # a simple timeline of what the agent attempted to do.
+            agent_steps.append({
+                "type": "tool_call",
+                "name": tool_name,
+                "arguments": display_args
             })
 
             tool_output = execute_tool(call)
+
+            # Record the actual result separately so we can distinguish
+            # what the agent requested from what the tool returned.
+            agent_steps.append({
+                "type": "tool_result",
+                "name": tool_name,
+                "result": tool_output
+            })
 
             messages.append({
                 "role": "tool",
@@ -348,6 +377,7 @@ def run_agent_turn(messages, user_input):
     return {
         "response": final_response,
         "tool_calls": tool_calls,
+        "agent_steps": agent_steps,
         "iterations": iterations,
         "completed": completed
     }
