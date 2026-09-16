@@ -4,7 +4,7 @@ import pytest
 import main
 
 
-# Keep the test data in one place instead of repeating it in every test.
+# Shared fixtures keep test cases focused on the behavior being tested.
 SAMPLE_PRODUCTS = [
     {
         "name": "Wireless Mouse",
@@ -39,7 +39,7 @@ SAMPLE_PRODUCTS = [
 
 @pytest.fixture
 def mock_products():
-    # Give each test a fake Mongo collection instead of using the real database.
+    # Isolate catalog tests from the MongoDB instance.
     with patch("main.products_collection") as mock_col:
         yield mock_col
 
@@ -176,7 +176,7 @@ def test_regex_characters_are_escaped(mock_products):
 
     assert result == []
 
-    # Make sure .* is treated literally, not as regex.
+    # Treat search input as literal text rather than regex syntax.
     mock_products.find.assert_called_once_with(
         {
             "name": {

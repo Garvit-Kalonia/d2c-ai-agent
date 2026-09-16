@@ -30,10 +30,12 @@ def search_products(query="", category="", max_price=None):
     if max_price is not None:
         try:
             max_price = float(max_price)
+
             if max_price >= 0:
                 mongo_query["price"] = {
                     "$lte": max_price
                 }
+
         except (ValueError, TypeError):
             pass
 
@@ -299,6 +301,58 @@ def execute_tool(call):
 MAX_ITERATIONS = 5
 
 
+def run_agent_turn(messages, user_input):
+    """
+    Run one user request through the agent loop.
+    """
+    messages.append({
+        "role": "user",
+        "content": user_input
+    })
+
+    tool_calls = []
+    iterations = 0
+    completed = False
+    final_response = ""
+
+    while iterations < MAX_ITERATIONS:
+        iterations += 1
+
+        response = ollama.chat(
+            model="qwen3:4b",
+            messages=messages,
+            tools=tools
+        )
+
+        assistant_msg = response.message
+        messages.append(assistant_msg)
+
+        if not assistant_msg.tool_calls:
+            final_response = assistant_msg.content
+            completed = True
+            break
+
+        for call in assistant_msg.tool_calls:
+            tool_calls.append({
+                "name": call.function.name,
+                "arguments": call.function.arguments
+            })
+
+            tool_output = execute_tool(call)
+
+            messages.append({
+                "role": "tool",
+                "content": json.dumps(tool_output)
+            })
+
+    return {
+        "response": final_response,
+        "tool_calls": tool_calls,
+        "iterations": iterations,
+        "completed": completed
+    }
+
+
 def run_agent():
     messages = [
         {
@@ -320,44 +374,21 @@ def run_agent():
             print("Goodbye!")
             break
 
-        messages.append({
-            "role": "user",
-            "content": user_input
-        })
+        result = run_agent_turn(
+            messages,
+            user_input
+        )
 
-        iterations = 0
-
-        while iterations < MAX_ITERATIONS:
-            iterations += 1
-
-            response = ollama.chat(
-                model="qwen3:4b",
-                messages=messages,
-                tools=tools
+        for call in result["tool_calls"]:
+            print(
+                f" -> {call['name']}"
+                f"({call['arguments']})"
             )
 
-            assistant_msg = response.message
-            messages.append(assistant_msg)
+        if result["response"]:
+            print(f"\nAgent: {result['response']}\n")
 
-            # No tool call means the model is ready to answer the user.
-            if not assistant_msg.tool_calls:
-                print(f"\nAgent: {assistant_msg.content}\n")
-                break
-
-            for call in assistant_msg.tool_calls:
-                print(
-                    f" -> {call.function.name}"
-                    f"({call.function.arguments})"
-                )
-
-                tool_output = execute_tool(call)
-
-                messages.append({
-                    "role": "tool",
-                    "content": json.dumps(tool_output)
-                })
-
-        if iterations >= MAX_ITERATIONS:
+        if not result["completed"]:
             print(
                 "\nSystem: Reached the maximum number of tool calls "
                 "for this request.\n"

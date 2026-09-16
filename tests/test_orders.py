@@ -4,7 +4,6 @@ import pytest
 import main
 
 
-# Keep the sample orders in one place so the tests don't repeat the same data.
 SAMPLE_ORDERS = {
     "ORD1001": {
         "order_id": "ORD1001",
@@ -25,7 +24,6 @@ SAMPLE_ORDERS = {
 
 @pytest.fixture
 def mock_orders():
-    # Use a fake Mongo collection so these tests don't touch the real database.
     with patch("main.orders_collection") as mock_col:
         yield mock_col
 
@@ -39,7 +37,6 @@ def test_lookup_existing_order(mock_orders, order_id):
 
     assert result == expected_order
 
-    # Make sure lookup_order sends the expected query to MongoDB.
     mock_orders.find_one.assert_called_once_with(
         {"order_id": order_id},
         {"_id": 0}
@@ -47,12 +44,10 @@ def test_lookup_existing_order(mock_orders, order_id):
 
 
 def test_lookup_nonexistent_order_returns_error(mock_orders):
-    # Simulate MongoDB finding no matching order.
     mock_orders.find_one.return_value = None
 
     result = main.lookup_order("ORD9999")
 
-    # A missing order should return a controlled error instead of crashing.
     assert result == {
         "error": "Order not found"
     }

@@ -6,7 +6,7 @@ import main
 
 @pytest.fixture
 def mock_orders():
-    # Give each test a fake Mongo collection instead of touching the real database.
+    # Isolate cancellation tests from the MongoDB instance.
     with patch("main.orders_collection") as mock_col:
         yield mock_col
 
@@ -46,7 +46,7 @@ def test_cancel_processing_order(mock_orders):
 
 @pytest.mark.parametrize("status", ["Shipped", "Delivered"])
 def test_cannot_cancel_non_processing_orders(mock_orders, status):
-    # If the order isn't Processing, we shouldn't even try the update.
+    # Cancellation is only permitted while the order is Processing.
     mock_orders.find_one.return_value = {
         "order_id": "ORD1001",
         "status": status
@@ -78,7 +78,7 @@ def test_cancellation_fails_on_concurrent_status_change(mock_orders):
         "status": "Processing"
     }
 
-    # Pretend another update changed the order before ours could.
+    # Simulate a status change between the initial lookup and the update.
     mock_orders.update_one.return_value.modified_count = 0
 
     result = main.cancel_order("ORD1002")

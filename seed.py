@@ -7,7 +7,7 @@ def seed_database() -> None:
     products_collection.delete_many({})
     orders_collection.delete_many({})
 
-    # Use copies so the seed data in data.py stays separate from MongoDB operations.
+    # copies so the seed data in data.py stays separate from MongoDB operations
     if products:
         products_collection.insert_many([item.copy() for item in products])
 
