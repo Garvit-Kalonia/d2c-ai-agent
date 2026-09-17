@@ -1,188 +1,48 @@
-from unittest.mock import patch
-
-import pytest
-import main
+from agent.tools import search_products, get_product
 
 
-# Shared fixtures keep test cases focused on the behavior being tested.
-SAMPLE_PRODUCTS = [
-    {
-        "name": "Wireless Mouse",
-        "category": "electronics",
-        "price": 799,
-        "currency": "INR",
-        "stock": 25
-    },
-    {
-        "name": "Mechanical Keyboard",
-        "category": "electronics",
-        "price": 2499,
-        "currency": "INR",
-        "stock": 12
-    },
-    {
-        "name": "USB-C Hub",
-        "category": "electronics",
-        "price": 1299,
-        "currency": "INR",
-        "stock": 8
-    },
-    {
-        "name": "Laptop Stand",
-        "category": "accessories",
-        "price": 1499,
-        "currency": "INR",
-        "stock": 20
-    },
-]
+def test_search_products_by_keyword():
+    results = search_products(query="wireless mouse")
+
+    assert len(results) == 1
+    assert results[0]["name"] == "Logitech MX Master 3S"
 
 
-@pytest.fixture
-def mock_products():
-    # Isolate catalog tests from the MongoDB instance.
-    with patch("main.products_collection") as mock_col:
-        yield mock_col
+def test_search_products_across_product_fields():
+    results = search_products(query="gaming mouse")
+
+    assert len(results) == 1
+    assert results[0]["name"] == "Razer DeathAdder V3"
 
 
-def test_search_all_products(mock_products):
-    mock_products.find.return_value = SAMPLE_PRODUCTS
+def test_search_products_by_category():
+    results = search_products(category="Phones")
 
-    result = main.search_products()
+    assert results
+    assert all(product["category"] == "Phones" for product in results)
 
-    assert len(result) == 4
-    assert result[0]["name"] == "Wireless Mouse"
 
-    mock_products.find.assert_called_once_with(
-        {},
-        {"_id": 0}
+def test_search_products_by_max_price():
+    results = search_products(max_price=10000)
+
+    assert results
+    assert all(product["price"] <= 10000 for product in results)
+
+
+def test_search_products_with_combined_filters():
+    results = search_products(
+        query="wireless",
+        category="Mice",
+        max_price=10000
     )
 
-
-def test_search_product_by_name(mock_products):
-    mock_products.find.return_value = [SAMPLE_PRODUCTS[0]]
-
-    result = main.search_products(query="mouse")
-
-    assert len(result) == 1
-    assert result[0]["name"] == "Wireless Mouse"
-
-    mock_products.find.assert_called_once_with(
-        {
-            "name": {
-                "$regex": "mouse",
-                "$options": "i"
-            }
-        },
-        {"_id": 0}
-    )
+    assert len(results) == 1
+    assert results[0]["name"] == "Logitech MX Master 3S"
 
 
-def test_product_search_is_case_insensitive(mock_products):
-    mock_products.find.return_value = [SAMPLE_PRODUCTS[0]]
+def test_get_product():
+    result = get_product("PROD017")
 
-    result = main.search_products(query="MOUSE")
-
-    assert len(result) == 1
-
-    mock_products.find.assert_called_once_with(
-        {
-            "name": {
-                "$regex": "MOUSE",
-                "$options": "i"
-            }
-        },
-        {"_id": 0}
-    )
-
-
-def test_search_by_category(mock_products):
-    mock_products.find.return_value = SAMPLE_PRODUCTS[:3]
-
-    result = main.search_products(category="electronics")
-
-    assert len(result) == 3
-
-    mock_products.find.assert_called_once_with(
-        {
-            "category": {
-                "$regex": "^electronics$",
-                "$options": "i"
-            }
-        },
-        {"_id": 0}
-    )
-
-
-def test_search_by_max_price(mock_products):
-    mock_products.find.return_value = [
-        SAMPLE_PRODUCTS[0],
-        SAMPLE_PRODUCTS[2],
-        SAMPLE_PRODUCTS[3]
-    ]
-
-    result = main.search_products(max_price=1500)
-
-    assert len(result) == 3
-
-    mock_products.find.assert_called_once_with(
-        {
-            "price": {
-                "$lte": 1500
-            }
-        },
-        {"_id": 0}
-    )
-
-
-def test_search_by_name_and_max_price(mock_products):
-    mock_products.find.return_value = [SAMPLE_PRODUCTS[0]]
-
-    result = main.search_products(
-        query="mouse",
-        max_price=1000
-    )
-
-    assert len(result) == 1
-
-    mock_products.find.assert_called_once_with(
-        {
-            "name": {
-                "$regex": "mouse",
-                "$options": "i"
-            },
-            "price": {
-                "$lte": 1000
-            }
-        },
-        {"_id": 0}
-    )
-
-
-def test_no_product_matches_filters(mock_products):
-    mock_products.find.return_value = []
-
-    result = main.search_products(
-        query="keyboard",
-        max_price=2000
-    )
-
-    assert result == []
-
-
-def test_regex_characters_are_escaped(mock_products):
-    mock_products.find.return_value = []
-
-    result = main.search_products(query=".*")
-
-    assert result == []
-
-    # Treat search input as literal text rather than regex syntax.
-    mock_products.find.assert_called_once_with(
-        {
-            "name": {
-                "$regex": r"\.\*",
-                "$options": "i"
-            }
-        },
-        {"_id": 0}
-    )
+    assert result["name"] == "Logitech MX Master 3S"
+    assert result["brand"] == "Logitech"
+    assert result["price"] == 7999

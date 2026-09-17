@@ -2,19 +2,27 @@ D2C Store Customer Policy
 
 RETURNS
 
-Customers may return unused products within 30 days of delivery.
+Customers may request a return within 30 days of delivery.
 
-Products must be returned in their original packaging and must not show
-signs of use or damage.
+To be eligible for a return:
 
-Customers should provide their order ID when requesting a return.
+The product must be unused.
+
+The product must be in its original packaging.
+
+The product must not show signs of damage or use.
+
+The customer must provide the order ID.
+
+Return requests are subject to inspection and approval. Submitting a return request does not guarantee that the return will be approved.
 
 REFUNDS
 
-Once a returned product has been inspected and the return is approved,
-the refund will be processed within 5-7 business days.
+Once a returned product has been inspected and the return is approved, the refund will be processed within 5-7 business days.
 
-Refunds are issued to the original payment method.
+Refunds are issued to the original payment method used for the order.
+
+The store does not promise an immediate refund when a return request is submitted.
 
 SHIPPING
 
@@ -22,17 +30,26 @@ Standard shipping normally takes 3-7 business days.
 
 Customers receive tracking information after their order has been shipped.
 
+Shipping times are estimates and may vary depending on the order and delivery location.
+
 WARRANTY
 
-Electronics products include a 12-month limited warranty covering
-manufacturing defects.
+Electronics products include a 12-month limited warranty covering manufacturing defects.
 
-The warranty does not cover accidental damage, liquid damage, or
-normal cosmetic wear.
+The warranty does not cover:
+
+Accidental damage
+
+Liquid damage
+
+Normal cosmetic wear
+
+Warranty coverage does not override the return policy or guarantee that every reported issue qualifies for a warranty claim.
 
 CANCELLATIONS
 
 Orders can be cancelled before they are shipped.
 
-Orders that have already been shipped cannot be cancelled through
-the standard cancellation process.
+Orders that have already been shipped cannot be cancelled through the standard cancellation process.
+
+Cancellation requests are subject to the order's current status. If an order has already moved to another status, the cancellation may no longer be available.
