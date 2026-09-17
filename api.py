@@ -5,7 +5,8 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
-from main import SYSTEM_PROMPT, run_agent_turn
+from agent.graph import run_agent_turn
+from agent.prompts import SYSTEM_PROMPT
 
 
 app = FastAPI(
@@ -13,7 +14,6 @@ app = FastAPI(
     description="API for the D2C customer support agent.",
     version="1.0.0"
 )
-
 
 # Serve the frontend files from the same FastAPI application.
 app.mount(
@@ -30,7 +30,6 @@ class ChatRequest(BaseModel):
 
 class ChatResponse(BaseModel):
     response: str
-    tool_calls: list
     agent_steps: list
     iterations: int
     completed: bool
@@ -61,8 +60,13 @@ def chat(request: ChatRequest):
 
     messages = sessions[request.session_id]
 
-    # Reuse the same message history so the agent can handle follow-up messages.
-    return run_agent_turn(
+    # Send one user message through the agent while keeping
+    # the conversation history for future follow-up messages.
+    result = run_agent_turn(
         messages,
         request.message
     )
+
+    # Pass the complete agent result to the frontend, including
+    # the tool activity used to generate the response.
+    return result

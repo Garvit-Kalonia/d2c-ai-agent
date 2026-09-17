@@ -63,13 +63,21 @@ def execute_tool(tool_name, arguments, customer_id=None):
 def run_agent_turn(messages, user_input, customer_id=None):
     """
     Run one conversational turn through the tool-calling loop.
+
+    Besides the final response, keep track of tool calls and results
+    so the frontend can display the agent's process.
     """
     messages.append({
         "role": "user",
         "content": user_input
     })
 
-    for _ in range(MAX_ITERATIONS):
+    agent_steps = []
+    iterations = 0
+
+    for iteration in range(1, MAX_ITERATIONS + 1):
+        iterations = iteration
+
         response = chat(
             model=MODEL,
             messages=messages,
@@ -82,7 +90,12 @@ def run_agent_turn(messages, user_input, customer_id=None):
 
         # If Qwen did not request a tool, its message is the final answer.
         if not assistant_message.get("tool_calls"):
-            return assistant_message.get("content", "")
+            return {
+                "response": assistant_message.get("content", ""),
+                "agent_steps": agent_steps,
+                "iterations": iterations,
+                "completed": True,
+            }
 
         for tool_call in assistant_message["tool_calls"]:
             function = tool_call["function"]
@@ -90,22 +103,40 @@ def run_agent_turn(messages, user_input, customer_id=None):
             tool_name = function["name"]
             arguments = function.get("arguments", {})
 
-            # Run the selected Python tool with the authenticated
-            # customer context controlled by the application.
+            # Record the tool call so the frontend can show
+            # what the agent decided to use.
+            agent_steps.append({
+                "type": "tool_call",
+                "name": tool_name,
+                "arguments": arguments,
+            })
+
             result = execute_tool(
                 tool_name,
                 arguments,
                 customer_id=customer_id,
             )
 
-            # Send the actual tool result back to Qwen so it can
-            # continue the conversation using real store data.
+            # Record the actual result returned by the Python tool.
+            agent_steps.append({
+                "type": "tool_result",
+                "name": tool_name,
+                "result": result,
+            })
+
+            # Send the real tool result back to Qwen so it can
+            # continue reasoning with actual store data.
             messages.append({
                 "role": "tool",
                 "content": _serialize_tool_result(result),
             })
 
-    return "I couldn't complete that request within the allowed number of steps."
+    return {
+        "response": "I couldn't complete that request within the allowed number of steps.",
+        "agent_steps": agent_steps,
+        "iterations": iterations,
+        "completed": False,
+    }
 
 
 def run_agent():
@@ -128,9 +159,9 @@ def run_agent():
         if user_input.lower() == "exit":
             break
 
-        response = run_agent_turn(
+        result = run_agent_turn(
             messages,
             user_input,
         )
 
-        print(f"Agent: {response}\n")
+        print(f"Agent: {result['response']}\n")

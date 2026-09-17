@@ -1,5 +1,20 @@
-from agent.graph import run_agent
+import webbrowser
+from threading import Timer
+
+import uvicorn
+
+
+def open_browser():
+    webbrowser.open("http://127.0.0.1:8000")
 
 
 if __name__ == "__main__":
-    run_agent()
+    # Give FastAPI a moment to start before opening the browser.
+    Timer(1.5, open_browser).start()
+
+    uvicorn.run(
+        "api:app",
+        host="127.0.0.1",
+        port=8000,
+        reload=False,
+    )

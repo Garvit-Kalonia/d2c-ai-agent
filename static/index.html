@@ -31,7 +31,7 @@
                 placeholder="Message the agent..."
                 rows="1"
             ></textarea>
-            
+
             <button id="sendButton" class="send-button" aria-label="Send message">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="12" y1="19" x2="12" y2="5"></line>
@@ -47,11 +47,18 @@
         const sendButton = document.getElementById("sendButton");
 
         function generateSessionId() {
-            if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+            if (
+                typeof crypto !== "undefined" &&
+                typeof crypto.randomUUID === "function"
+            ) {
                 return crypto.randomUUID();
             }
 
-            return "session-" + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
+            return (
+                "session-" +
+                Math.random().toString(36).substring(2, 11) +
+                Date.now().toString(36)
+            );
         }
 
         const sessionId = generateSessionId();
@@ -141,7 +148,11 @@
 
         function buildProcessContent(activity) {
             if (!activity || activity.length === 0) {
-                return `<div class="process-empty">No tool activity recorded.</div>`;
+                return `
+                    <div class="process-empty">
+                        No tools were used for this request.
+                    </div>
+                `;
             }
 
             let html = "";
@@ -151,8 +162,12 @@
                     html += `
                         <div class="process-step">
                             <div class="process-label">TOOL CALL</div>
-                            <div class="process-tool-name">${escapeHtml(step.name)}</div>
-                            <pre>${escapeHtml(formatArguments(step.arguments))}</pre>
+                            <div class="process-tool-name">
+                                ${escapeHtml(step.name)}
+                            </div>
+                            <pre>${escapeHtml(
+                                formatArguments(step.arguments)
+                            )}</pre>
                         </div>
                     `;
                 }
@@ -162,7 +177,11 @@
 
                     if (typeof resultText !== "string") {
                         try {
-                            resultText = JSON.stringify(resultText, null, 2);
+                            resultText = JSON.stringify(
+                                resultText,
+                                null,
+                                2
+                            );
                         } catch {
                             resultText = String(resultText);
                         }
@@ -171,7 +190,9 @@
                     html += `
                         <div class="process-step">
                             <div class="process-label">RESULT</div>
-                            <div class="process-tool-name">${escapeHtml(step.name)}</div>
+                            <div class="process-tool-name">
+                                ${escapeHtml(step.name)}
+                            </div>
                             <pre>${escapeHtml(resultText)}</pre>
                         </div>
                     `;
@@ -181,7 +202,12 @@
             return html;
         }
 
-        function addAssistantMessage(response, activity, iterations, completed) {
+        function addAssistantMessage(
+            response,
+            activity,
+            iterations,
+            completed
+        ) {
             const wrapper = document.createElement("div");
             wrapper.className = "message assistant-message";
 
@@ -202,54 +228,58 @@
             header.appendChild(avatar);
             header.appendChild(name);
 
-            let processPanel = null;
+            /*
+             * Always show Process details.
+             *
+             * This is useful even when the agent did not call any tools,
+             * because it lets us see that the response came directly
+             * from the model rather than from a tool-backed operation.
+             */
+            const processBtn = document.createElement("button");
+            processBtn.className = "process-button";
+            processBtn.type = "button";
+            processBtn.innerHTML = `
+                <span class="process-chevron">›</span>
+                <span>Process details</span>
+            `;
 
-            if (activity && activity.length > 0) {
-                const processBtn = document.createElement("button");
-                processBtn.className = "process-button";
-                processBtn.type = "button";
-                processBtn.innerHTML = `
-                    <span class="process-chevron">›</span>
-                    <span>Process details</span>
-                `;
+            const processPanel = document.createElement("div");
+            processPanel.className = "process-panel";
 
-                processPanel = document.createElement("div");
-                processPanel.className = "process-panel";
-
-                processPanel.innerHTML = `
-                    <div class="process-inner">
-                        ${buildProcessContent(activity)}
-                        <div class="process-footer">
-                            <span>${iterations} iteration${iterations === 1 ? "" : "s"}</span>
-                            <span class="process-completed">${completed ? "Completed" : "Stopped"}</span>
-                        </div>
+            processPanel.innerHTML = `
+                <div class="process-inner">
+                    ${buildProcessContent(activity)}
+                    <div class="process-footer">
+                        <span>
+                            ${iterations}
+                            iteration${iterations === 1 ? "" : "s"}
+                        </span>
+                        <span class="process-completed">
+                            ${completed ? "Completed" : "Stopped"}
+                        </span>
                     </div>
-                `;
+                </div>
+            `;
 
-                processBtn.addEventListener("click", () => {
-                    const isOpen = body.classList.toggle("process-open");
+            processBtn.addEventListener("click", () => {
+                const isOpen = body.classList.toggle("process-open");
 
-                    processBtn.setAttribute(
-                        "aria-expanded",
-                        isOpen ? "true" : "false"
-                    );
+                processBtn.setAttribute(
+                    "aria-expanded",
+                    isOpen ? "true" : "false"
+                );
 
-                    scrollToBottom();
-                });
+                scrollToBottom();
+            });
 
-                header.appendChild(processBtn);
-            }
+            header.appendChild(processBtn);
 
             const content = document.createElement("div");
             content.className = "assistant-content";
             content.textContent = response;
 
             body.appendChild(header);
-
-            if (processPanel) {
-                body.appendChild(processPanel);
-            }
-
+            body.appendChild(processPanel);
             body.appendChild(content);
 
             wrapper.appendChild(body);
@@ -284,7 +314,9 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Request failed: ${response.status}`);
+                    throw new Error(
+                        `Request failed: ${response.status}`
+                    );
                 }
 
                 const data = await response.json();
@@ -325,10 +357,13 @@
 
         input.addEventListener("input", () => {
             input.style.height = "auto";
-            input.style.height = Math.min(input.scrollHeight, 160) + "px";
+            input.style.height =
+                Math.min(input.scrollHeight, 160) + "px";
         });
 
         input.focus();
     </script>
 </body>
 </html>
+
+
