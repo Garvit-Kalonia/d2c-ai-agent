@@ -7,5 +7,3 @@ db = client["d2c_agent"]
 products_collection = db["products"]
 orders_collection = db["orders"]
 
-print("Connected to MongoDB")
-

@@ -1,0 +1,302 @@
+[
+  {
+    "customer_id": "CUST001",
+    "name": "Rahul Sharma",
+    "email": "rahul.sharma@example.com",
+    "phone": "+91-9876501001",
+    "access_key": "0000",
+    "address": {
+      "street": "14 Sector 62",
+      "city": "Noida",
+      "state": "Uttar Pradesh",
+      "postal_code": "201309",
+      "country": "India"
+    },
+    "created_at": "2025-11-01T10:00:00"
+  },
+  {
+    "customer_id": "CUST002",
+    "name": "Priya Mehta",
+    "email": "priya.mehta@example.com",
+    "phone": "+91-9876501002",
+    "access_key": "0000",
+    "address": {
+      "street": "42 Indiranagar",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "postal_code": "560038",
+      "country": "India"
+    },
+    "created_at": "2025-11-04T11:30:00"
+  },
+  {
+    "customer_id": "CUST003",
+    "name": "Aman Verma",
+    "email": "aman.verma@example.com",
+    "phone": "+91-9876501003",
+    "access_key": "0000",
+    "address": {
+      "street": "18 Model Town",
+      "city": "New Delhi",
+      "state": "Delhi",
+      "postal_code": "110009",
+      "country": "India"
+    },
+    "created_at": "2025-11-08T09:15:00"
+  },
+  {
+    "customer_id": "CUST004",
+    "name": "Neha Kapoor",
+    "email": "neha.kapoor@example.com",
+    "phone": "+91-9876501004",
+    "access_key": "0000",
+    "address": {
+      "street": "77 Baner Road",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postal_code": "411007",
+      "country": "India"
+    },
+    "created_at": "2025-11-12T14:20:00"
+  },
+  {
+    "customer_id": "CUST005",
+    "name": "Arjun Nair",
+    "email": "arjun.nair@example.com",
+    "phone": "+91-9876501005",
+    "access_key": "0000",
+    "address": {
+      "street": "12 Kakkanad",
+      "city": "Kochi",
+      "state": "Kerala",
+      "postal_code": "682030",
+      "country": "India"
+    },
+    "created_at": "2025-11-15T16:45:00"
+  },
+  {
+    "customer_id": "CUST006",
+    "name": "Sneha Iyer",
+    "email": "sneha.iyer@example.com",
+    "phone": "+91-9876501006",
+    "access_key": "0000",
+    "address": {
+      "street": "9 Velachery Main Road",
+      "city": "Chennai",
+      "state": "Tamil Nadu",
+      "postal_code": "600042",
+      "country": "India"
+    },
+    "created_at": "2025-11-18T12:10:00"
+  },
+  {
+    "customer_id": "CUST007",
+    "name": "Vikram Singh",
+    "email": "vikram.singh@example.com",
+    "phone": "+91-9876501007",
+    "access_key": "0000",
+    "address": {
+      "street": "31 Vaishali Nagar",
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "postal_code": "302021",
+      "country": "India"
+    },
+    "created_at": "2025-11-21T10:30:00"
+  },
+  {
+    "customer_id": "CUST008",
+    "name": "Kavya Reddy",
+    "email": "kavya.reddy@example.com",
+    "phone": "+91-9876501008",
+    "access_key": "0000",
+    "address": {
+      "street": "55 Gachibowli",
+      "city": "Hyderabad",
+      "state": "Telangana",
+      "postal_code": "500032",
+      "country": "India"
+    },
+    "created_at": "2025-11-24T13:00:00"
+  },
+  {
+    "customer_id": "CUST009",
+    "name": "Rohan Malhotra",
+    "email": "rohan.malhotra@example.com",
+    "phone": "+91-9876501009",
+    "access_key": "0000",
+    "address": {
+      "street": "21 Park Street",
+      "city": "Kolkata",
+      "state": "West Bengal",
+      "postal_code": "700016",
+      "country": "India"
+    },
+    "created_at": "2025-11-27T15:30:00"
+  },
+  {
+    "customer_id": "CUST010",
+    "name": "Ananya Joshi",
+    "email": "ananya.joshi@example.com",
+    "phone": "+91-9876501010",
+    "access_key": "0000",
+    "address": {
+      "street": "16 Kothrud",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postal_code": "411038",
+      "country": "India"
+    },
+    "created_at": "2025-12-01T11:45:00"
+  },
+  {
+    "customer_id": "CUST011",
+    "name": "Karan Bhatia",
+    "email": "karan.bhatia@example.com",
+    "phone": "+91-9876501011",
+    "access_key": "0000",
+    "address": {
+      "street": "88 Dwarka Sector 10",
+      "city": "New Delhi",
+      "state": "Delhi",
+      "postal_code": "110075",
+      "country": "India"
+    },
+    "created_at": "2025-12-04T09:30:00"
+  },
+  {
+    "customer_id": "CUST012",
+    "name": "Ishita Rao",
+    "email": "ishita.rao@example.com",
+    "phone": "+91-9876501012",
+    "access_key": "0000",
+    "address": {
+      "street": "7 HSR Layout",
+      "city": "Bengaluru",
+      "state": "Karnataka",
+      "postal_code": "560102",
+      "country": "India"
+    },
+    "created_at": "2025-12-07T17:20:00"
+  },
+  {
+    "customer_id": "CUST013",
+    "name": "Aditya Kulkarni",
+    "email": "aditya.kulkarni@example.com",
+    "phone": "+91-9876501013",
+    "access_key": "0000",
+    "address": {
+      "street": "24 Wakad",
+      "city": "Pune",
+      "state": "Maharashtra",
+      "postal_code": "411057",
+      "country": "India"
+    },
+    "created_at": "2025-12-10T14:00:00"
+  },
+  {
+    "customer_id": "CUST014",
+    "name": "Meera Shah",
+    "email": "meera.shah@example.com",
+    "phone": "+91-9876501014",
+    "access_key": "0000",
+    "address": {
+      "street": "11 Satellite",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "postal_code": "380015",
+      "country": "India"
+    },
+    "created_at": "2025-12-13T10:15:00"
+  },
+  {
+    "customer_id": "CUST015",
+    "name": "Nikhil Gupta",
+    "email": "nikhil.gupta@example.com",
+    "phone": "+91-9876501015",
+    "access_key": "0000",
+    "address": {
+      "street": "39 Gomti Nagar",
+      "city": "Lucknow",
+      "state": "Uttar Pradesh",
+      "postal_code": "226010",
+      "country": "India"
+    },
+    "created_at": "2025-12-16T12:30:00"
+  },
+  {
+    "customer_id": "CUST016",
+    "name": "Simran Kaur",
+    "email": "simran.kaur@example.com",
+    "phone": "+91-9876501016",
+    "access_key": "0000",
+    "address": {
+      "street": "5 Sector 17",
+      "city": "Chandigarh",
+      "state": "Chandigarh",
+      "postal_code": "160017",
+      "country": "India"
+    },
+    "created_at": "2025-12-19T16:00:00"
+  },
+  {
+    "customer_id": "CUST017",
+    "name": "Dev Patel",
+    "email": "dev.patel@example.com",
+    "phone": "+91-9876501017",
+    "access_key": "0000",
+    "address": {
+      "street": "63 Vastrapur",
+      "city": "Ahmedabad",
+      "state": "Gujarat",
+      "postal_code": "380015",
+      "country": "India"
+    },
+    "created_at": "2025-12-22T09:45:00"
+  },
+  {
+    "customer_id": "CUST018",
+    "name": "Pooja Menon",
+    "email": "pooja.menon@example.com",
+    "phone": "+91-9876501018",
+    "access_key": "0000",
+    "address": {
+      "street": "28 Andheri East",
+      "city": "Mumbai",
+      "state": "Maharashtra",
+      "postal_code": "400069",
+      "country": "India"
+    },
+    "created_at": "2025-12-25T13:30:00"
+  },
+  {
+    "customer_id": "CUST019",
+    "name": "Siddharth Jain",
+    "email": "siddharth.jain@example.com",
+    "phone": "+91-9876501019",
+    "access_key": "0000",
+    "address": {
+      "street": "14 Malviya Nagar",
+      "city": "Jaipur",
+      "state": "Rajasthan",
+      "postal_code": "302017",
+      "country": "India"
+    },
+    "created_at": "2025-12-28T11:00:00"
+  },
+  {
+    "customer_id": "CUST020",
+    "name": "Tanya Sethi",
+    "email": "tanya.sethi@example.com",
+    "phone": "+91-9876501020",
+    "access_key": "0000",
+    "address": {
+      "street": "102 Salt Lake",
+      "city": "Kolkata",
+      "state": "West Bengal",
+      "postal_code": "700091",
+      "country": "India"
+    },
+    "created_at": "2025-12-31T15:15:00"
+  }
+]
